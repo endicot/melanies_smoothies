@@ -41,6 +41,10 @@ private_key = serialization.load_pem_private_key(
     st.secrets["connections"]["snowflake"]["private_key"].encode(),
     password=None,
 )
+
+#debug verify key
+st.write(list(st.secrets["connections"]["snowflake"].keys()))
+
 cnx = st.connection("snowflake")
 session = cnx.session()
 
