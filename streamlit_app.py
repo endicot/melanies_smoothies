@@ -35,18 +35,42 @@ st.write(
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your Smoothie will be:", name_on_order)
 
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 
-# session = get_active_session()
+pem_key = st.secrets["connections"]["snowflake"]["private_key"].strip().encode("utf-8")
+
 private_key = serialization.load_pem_private_key(
-    st.secrets["connections"]["snowflake"]["private_key"].encode(),
+    pem_key,
     password=None,
+    backend=default_backend(),
 )
 
-#debug verify key
-# st.write(st.secrets["connections"]["snowflake"]["test_key"])
-# st.write(st.secrets["connections"]["snowflake"]["private_key"])
-# st.secrets["connections"]["snowflake"]["private_key"]
-# st.write(list(st.secrets["connections"]["snowflake"].keys()))
+private_key_bytes = private_key.private_bytes(
+    encoding=serialization.Encoding.DER,
+    format=serialization.PrivateFormat.PKCS8,
+    encryption_algorithm=serialization.NoEncryption(),
+)
+
+params = {
+    "account": st.secrets["connections"]["snowflake"]["account"],
+    "user": st.secrets["connections"]["snowflake"]["user"],
+    "private_key": private_key_bytes,
+    "role": st.secrets["connections"]["snowflake"]["role"],
+    "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
+    "database": st.secrets["connections"]["snowflake"]["database"],
+    "schema": st.secrets["connections"]["snowflake"]["schema"],
+}
+
+session = Session.builder.configs(params).create()
+
+# session = get_active_session()
+# private_key = serialization.load_pem_private_key(
+#     st.secrets["connections"]["snowflake"]["private_key"].encode(),
+#     password=None,
+# )
+
+raise systemexit
 
 cnx = st.connection("snowflake")
 session = cnx.session()
