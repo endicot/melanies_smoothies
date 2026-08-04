@@ -73,7 +73,6 @@ session = Session.builder.configs(params).create()
 #     password=None,
 # )
 
-raise SystemExit
 
 cnx = st.connection("snowflake")
 session = cnx.session()
