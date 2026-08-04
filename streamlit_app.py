@@ -36,6 +36,10 @@ st.write("The name on your Smoothie will be:", name_on_order)
 
 
 # session = get_active_session()
+private_key = serialization.load_pem_private_key(
+    st.secrets["connections"]["snowflake"]["private_key"].encode(),
+    password=None,
+)
 cnx = st.connection("snowflake")
 session = cnx.session()
 
