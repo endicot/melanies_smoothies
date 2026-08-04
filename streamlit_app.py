@@ -43,8 +43,9 @@ st.write("The name on your Smoothie will be:", name_on_order)
 # )
 
 #debug verify key
-st.secrets["connections"]["snowflake"]["private_key"]
-st.write(list(st.secrets["connections"]["snowflake"].keys()))
+st.write(st.secrets["connections"]["snowflake"]["test_key"])
+# st.secrets["connections"]["snowflake"]["private_key"]
+# st.write(list(st.secrets["connections"]["snowflake"].keys()))
 
 cnx = st.connection("snowflake")
 session = cnx.session()
