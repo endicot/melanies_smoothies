@@ -63,6 +63,8 @@ params = {
     "schema": st.secrets["connections"]["snowflake"]["schema"],
 }
 
+st.write(repr(st.secrets["connections"]["snowflake"]["private_key"][:50]))
+
 session = Session.builder.configs(params).create()
 
 # session = get_active_session()
