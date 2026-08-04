@@ -2,6 +2,7 @@
 import streamlit as st 
 import os
 # from snowflake.snowpark.context import get_active_session
+from cryptography.hazmat.primitives import serialization
 from snowflake.snowpark.functions import col
 
 # Write directly to the app
