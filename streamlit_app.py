@@ -11,8 +11,37 @@ st.write(
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your Smoothie will be:", name_on_order)
 
-cnx = st.connection("snowflake")
-session = cnx.session()
+
+# Decode base64 → PEM bytes
+pem_bytes = base64.b64decode(st.secrets["connections"]["snowflake"]["private_key_b64"])
+
+# Load PEM → private key object
+private_key = serialization.load_pem_private_key(
+    pem_bytes,
+    password=None,
+    backend=default_backend(),
+)
+
+# Convert to DER (what Snowflake expects)
+der_bytes = private_key.private_bytes(
+    encoding=serialization.Encoding.DER,
+    format=serialization.PrivateFormat.PKCS8,
+    encryption_algorithm=serialization.NoEncryption(),
+)
+
+session = Session.builder.configs({
+    "account": st.secrets["connections"]["snowflake"]["account"],
+    "user": st.secrets["connections"]["snowflake"]["user"],
+    "private_key": der_bytes,
+    "role": st.secrets["connections"]["snowflake"]["role"],
+    "warehouse": st.secrets["connections"]["snowflake"]["warehouse"],
+    "database": st.secrets["connections"]["snowflake"]["database"],
+    "schema": st.secrets["connections"]["snowflake"]["schema"],
+}).create()
+
+
+# cnx = st.connection("snowflake")
+# session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('Fruit_name'))
 
 
