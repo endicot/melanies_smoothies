@@ -1,4 +1,4 @@
 # requirement.txt
-# snowflake-snowpark-python
-streamlit
-cryptography
+snowflake-snowpark-python
+#streamlit
+#cryptography
