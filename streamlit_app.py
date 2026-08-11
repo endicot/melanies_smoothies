@@ -75,5 +75,5 @@ if ingredients_list:
 
 # new section to display smoothiefroot nutrition information
 import requests
-smoothierfroot_response = requests.get("https://smoothierfroot.com/api/fruit_options")
-st.text(smoothierfroot_response)
+smoothiefroot_response = requests.get("https://smoothiefroot.com/api/fruit_options")
+st.text(smoothiefroot_response)
