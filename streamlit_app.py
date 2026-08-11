@@ -45,6 +45,8 @@ session = Session.builder.configs({
 }).create()
 
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('Fruit_name'))
+st.dataframe(data=my_dataframe, use_container_width=True)
+st.stop()
 
 
 ingredients_list = st.multiselect(
