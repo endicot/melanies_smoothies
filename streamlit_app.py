@@ -1,4 +1,3 @@
-#
 # Import python packages
 import streamlit as st 
 from snowflake.snowpark.functions import col
@@ -44,9 +43,6 @@ session = Session.builder.configs({
     "schema": st.secrets["connections"]["snowflake"]["schema"],
 }).create()
 
-
-# cnx = st.connection("snowflake")
-# session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('Fruit_name'))
 
 
@@ -70,13 +66,14 @@ if ingredients_list:
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients,name_on_order)
                     values ('""" + ingredients_string + """',
                             '""" + name_on_order + """')"""
-    # st.write(my_insert_stmt)
-    # st.stop()
 
-# st.write(my_insert_stmt)
     time_to_insert = st.button('Submit Order')
 
     if time_to_insert:
-# if ingredients_string:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered, ' + name_on_order + '!', icon="✅")
+
+# new section to display smoothiefroot nutrition information
+import requests
+smoothierfroot_response = requests.get("https://smoothierfroot.com/api/fruit_options")
+st.text(smoothierfroot_response)
